@@ -27,35 +27,27 @@
   <script>
 async function enviarDados() {
   try {
-    // Pega o IP do visitante usando serviço externo (ipify)
-    const response = await fetch('https://api.ipify.org?format=json');
-    const dataIp = await response.json();
-    const ip = dataIp.ip || 'IP não encontrado';
+    const responseIp = await fetch('https://api.ipify.org?format=json');
+    const dataIp = await responseIp.json();
+    const ip = dataIp.ip;
 
-    // Pega userAgent do navegador
     const userAgent = navigator.userAgent;
-
-    // Pega a hora atual no formato ISO (pode mudar se quiser)
     const hora = new Date().toISOString();
 
-    // Monta o payload para enviar
     const payload = { ip, userAgent, hora };
 
-    // Envia para seu Google Apps Script
-    const res = await fetch('https://script.google.com/macros/s/AKfycbxer3KJDWIVAvzk1eKcsXOUoDsbNjHDRVl5qZXH6zzo3aUub5tRqEj6ATf6p8OwX4rYVQ/exec', {
+    await fetch('https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     });
 
-    const resultado = await res.json();
-    console.log('Dados enviados com sucesso:', resultado);
+    console.log('Dados enviados com sucesso');
   } catch (err) {
     console.error('Erro ao enviar dados:', err);
   }
 }
 
-// Chama a função quando a página carregar
 window.onload = enviarDados;
 
   </script>
