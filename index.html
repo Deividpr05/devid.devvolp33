@@ -24,25 +24,31 @@
   <h1>Você acessou o site!</h1>
   <p class="status">Registrando seu acesso...</p>
 
-  <script>
-async function enviarSimples() {
-  const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json());
-  const params = new URLSearchParams({
-    ip: ipData.ip,
-    navegador: navigator.userAgent
-  });
+ <script>
+  async function registrarAcesso() {
+    try {
+      const ip = await fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => data.ip);
 
-  fetch('https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev?' + params.toString(), {
-    method: 'GET',
-    mode: 'no-cors' // ✨ o segredo que libera a parada
-  });
+      const userAgent = navigator.userAgent;
 
-  // Não dá pra ver resposta por causa do "no-cors"
-  console.log("Dados enviados (modo no-cors)");
-}
+      const url = 'https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev?' +
+        new URLSearchParams({
+          ip: ip,
+          navegador: userAgent
+        });
 
-window.onload = enviarSimples;
+      // Envia os dados como se fosse carregar uma imagem
+      const img = new Image();
+      img.src = url;
+    } catch (err) {
+      console.error('Erro ao registrar acesso:', err);
+    }
+  }
 
-  </script>
+  window.onload = registrarAcesso;
+</script>
+
 </body>
 </html>
