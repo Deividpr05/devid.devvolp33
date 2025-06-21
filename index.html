@@ -1,105 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Símbolo Girando</title>
+  <title>Painel de Acesso</title>
   <style>
-    .rotating-symbol{
-      font-size: 36px; /* Tamanho do símbolo */
-      animation: spin 5s linear infinite; /* Aplicar a animação */
+    body {
+      background: #0d1b2a;
+      color: #e0f7fa;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
     }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); } /* Rotação inicial */
-    100% { transform: rotate(360deg); } /* Rotação final (uma volta completa) */
+    h1 {
+      color: #00bcd4;
+    }
+    .status {
+      margin-top: 20px;
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
-  <div class="rotating-symbol"><img src="download.png" alt=""></div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Símbolo Girando</title>
-  <style>
-    .rotating-symbol{
-      font-size: 36px; /* Tamanho do símbolo */
-      animation: spin 4s linear infinite; /* Aplicar a animação */
+  <h1>Você acessou o site!</h1>
+  <p class="status">Registrando seu acesso...</p>
+
+  <script>
+    // Função para pegar o IP
+    async function getIP() {
+      try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const json = await res.json();
+        return json.ip;
+      } catch (e) {
+        return "IP não encontrado";
+      }
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); } /* Rotação inicial */
-    100% { transform: rotate(360deg); } /* Rotação final (uma volta completa) */
-    }
-  </style>
-</head>
-<body>
-  <div class="rotating-symbol"><img src="transferir.jfif" alt=""></div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Símbolo Girando</title>
-  <style>
-    .rotating-symbol{
-      font-size: 36px; /* Tamanho do símbolo */
-      animation: spin 3s linear infinite; /* Aplicar a animação */
-    }
+    async function registrarAcesso() {
+      const ip = await getIP();
+      const navegador = navigator.userAgent;
+      const horario = new Date().toLocaleString();
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); } /* Rotação inicial */
-    100% { transform: rotate(360deg); } /* Rotação final (uma volta completa) */
-    }
-  </style>
-</head>
-<body>
-  <div class="rotating-symbol"><img src="download.jpg" alt=""></div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Símbolo Girando</title>
-  <style>
-    .rotating-symbol{
-      font-size: 36px; /* Tamanho do símbolo */
-      animation: spin 6s linear infinite; /* Aplicar a animação */
+      const dados = { ip, navegador, horario };
+
+      fetch("https://script.google.com/macros/s/AKfycbyYWJZoOjogCIvlwlphh0C65boTEZt4oDo0g6wUVwZa_kVoHSwTuXfFQN0phTulW8eq/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados)
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.querySelector(".status").innerText = "Acesso registrado com sucesso!";
+        console.log("Resposta do servidor:", data);
+      })
+      .catch(err => {
+        document.querySelector(".status").innerText = "Erro ao registrar o acesso.";
+        console.error("Erro:", err);
+      });
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); } /* Rotação inicial */
-    100% { transform: rotate(360deg); } /* Rotação final (uma volta completa) */
-    }
-  </style>
-</head>
-<body>
-  <div class="rotating-symbol"><img src="download (1).jpg" alt=""></div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>foto aleatoria</title>
-</head>
-<body>
-
-<p style="font-size: 36px;"><p style="font-size: 24px;">palmeiras nao tem mundial.</p>
-<p style="font-size: 36px;">palmeiras nao tem mundial.</p>
-.</p>
-
-
- 
+    registrarAcesso();
+  </script>
 </body>
 </html>
