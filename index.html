@@ -25,17 +25,6 @@
   <p class="status">Registrando seu acesso...</p>
 
   <script>
-    async function getIP() {
-  try {
-    const res = await fetch("https://api.ipify.org?format=json");
-    const json = await res.json();
-    return json.ip;
-  } catch (e) {
-    console.warn("Não foi possível obter o IP:", e);
-    return "IP não encontrado";
-  }
-}
-
     // Função para pegar o IP
     async function getIP() {
       try {
@@ -43,10 +32,12 @@
         const json = await res.json();
         return json.ip;
       } catch (e) {
+        console.warn("Não foi possível obter o IP:", e);
         return "IP não encontrado";
       }
     }
 
+    // Função para registrar o acesso
     async function registrarAcesso() {
       const ip = await getIP();
       const navegador = navigator.userAgent;
@@ -61,15 +52,16 @@
       })
       .then(res => res.json())
       .then(data => {
-        document.querySelector(".status").innerText = "Acesso registrado com sucesso!";
+        document.querySelector(".status").innerText = "✅ Acesso registrado com sucesso!";
         console.log("Resposta do servidor:", data);
       })
       .catch(err => {
-        document.querySelector(".status").innerText = "Erro ao registrar o acesso.";
+        document.querySelector(".status").innerText = "❌ Erro ao registrar o acesso.";
         console.error("Erro:", err);
       });
     }
 
+    // Executar ao carregar a página
     registrarAcesso();
   </script>
 </body>
