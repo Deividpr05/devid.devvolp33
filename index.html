@@ -25,21 +25,25 @@
   <p class="status">Registrando seu acesso...</p>
 
   <script>
-const params = new URLSearchParams({
-  nome: 'Deivid Davi',
-  ip: await (await fetch('https://api.ipify.org?format=json')).json().then(data => data.ip),
-  navegador: navigator.userAgent,
-  plataforma: navigator.platform,
-  idioma: navigator.language,
-  resolucao: `${window.screen.width}x${window.screen.height}`,
-  cookies: navigator.cookieEnabled ? 'sim' : 'não'
-});
+async function enviarSimples() {
+  try {
+    const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json());
+    const params = new URLSearchParams({
+      ip: ipData.ip,
+      navegador: navigator.userAgent
+    });
 
-fetch('https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev?' + params.toString())
-  .then(res => res.text())
-  .then(console.log)
-  .catch(console.error);
+    const url = 'https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev?' + params.toString();
 
+    const res = await fetch(url);
+    const text = await res.text();
+    console.log('Resposta do GAS:', text);
+  } catch (e) {
+    console.error('Erro enviando dados:', e);
+  }
+}
+
+window.onload = enviarSimples;
 
   </script>
 </body>
