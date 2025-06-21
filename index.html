@@ -26,30 +26,33 @@
 
   <script>
 async function enviarDados() {
-  // Pega IP via serviço externo (exemplo: ipify)
-  let ip = await fetch('https://api.ipify.org?format=json')
-                .then(res => res.json())
-                .then(data => data.ip)
-                .catch(() => 'IP desconhecido');
+  try {
+    // Pega o IP do visitante usando serviço externo (ipify)
+    const response = await fetch('https://api.ipify.org?format=json');
+    const dataIp = await response.json();
+    const ip = dataIp.ip || 'IP não encontrado';
 
-  let userAgent = navigator.userAgent;
-  let agora = new Date().toISOString();
+    // Pega userAgent do navegador
+    const userAgent = navigator.userAgent;
 
-  let payload = {
-    ip: ip,
-    userAgent: userAgent,
-    hora: agora
-  };
+    // Pega a hora atual no formato ISO (pode mudar se quiser)
+    const hora = new Date().toISOString();
 
-  fetch('https://script.google.com/macros/s/AKfycbwo2Adx-qsFMSZOPhRRXaEzT8oQQWwMLge2Do4RHWr78cmeXwBAwb_EeokLvwQLpfuS/exec', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }).then(res => res.json())
-    .then(data => console.log('Enviado:', data))
-    .catch(err => console.error('Erro ao enviar:', err));
+    // Monta o payload para enviar
+    const payload = { ip, userAgent, hora };
+
+    // Envia para seu Google Apps Script
+    const res = await fetch('https://script.google.com/macros/s/AKfycbxer3KJDWIVAvzk1eKcsXOUoDsbNjHDRVl5qZXH6zzo3aUub5tRqEj6ATf6p8OwX4rYVQ/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    const resultado = await res.json();
+    console.log('Dados enviados com sucesso:', resultado);
+  } catch (err) {
+    console.error('Erro ao enviar dados:', err);
+  }
 }
 
 // Chama a função quando a página carregar
