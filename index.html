@@ -25,6 +25,17 @@
   <p class="status">Registrando seu acesso...</p>
 
   <script>
+    async function getIP() {
+  try {
+    const res = await fetch("https://api.ipify.org?format=json");
+    const json = await res.json();
+    return json.ip;
+  } catch (e) {
+    console.warn("Não foi possível obter o IP:", e);
+    return "IP não encontrado";
+  }
+}
+
     // Função para pegar o IP
     async function getIP() {
       try {
