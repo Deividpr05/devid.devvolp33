@@ -33,7 +33,7 @@ async function enviarSimples() {
       navegador: navigator.userAgent
     });
 
-    const url = 'https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev?' + params.toString();
+    const url = 'https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev' + params.toString();
 
     const res = await fetch(url);
     const text = await res.text();
