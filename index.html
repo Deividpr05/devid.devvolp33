@@ -26,21 +26,19 @@
 
   <script>
 async function enviarSimples() {
-  try {
-    const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json());
-    const params = new URLSearchParams({
-      ip: ipData.ip,
-      navegador: navigator.userAgent
-    });
+  const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json());
+  const params = new URLSearchParams({
+    ip: ipData.ip,
+    navegador: navigator.userAgent
+  });
 
-    const url = 'https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev' + params.toString();
+  fetch('https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev?' + params.toString(), {
+    method: 'GET',
+    mode: 'no-cors' // ✨ o segredo que libera a parada
+  });
 
-    const res = await fetch(url);
-    const text = await res.text();
-    console.log('Resposta do GAS:', text);
-  } catch (e) {
-    console.error('Erro enviando dados:', e);
-  }
+  // Não dá pra ver resposta por causa do "no-cors"
+  console.log("Dados enviados (modo no-cors)");
 }
 
 window.onload = enviarSimples;
