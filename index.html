@@ -41,7 +41,7 @@ async function enviarDados() {
     hora: agora
   };
 
-  fetch('URL_DO_SEU_GAS_WEBAPP', {
+  fetch('https://script.google.com/macros/s/AKfycbwo2Adx-qsFMSZOPhRRXaEzT8oQQWwMLge2Do4RHWr78cmeXwBAwb_EeokLvwQLpfuS/exec', {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: {
