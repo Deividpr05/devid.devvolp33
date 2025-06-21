@@ -24,31 +24,40 @@
   <h1>Você acessou o site!</h1>
   <p class="status">Registrando seu acesso...</p>
 
- <script>
+<script>
   async function registrarAcesso() {
     try {
-      const ip = await fetch('https://api.ipify.org?format=json')
-        .then(res => res.json())
-        .then(data => data.ip);
+      // Busca o IP externo
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      const ip = ipData.ip;
 
-      const userAgent = navigator.userAgent;
+      // Dados básicos
+      const navegador = navigator.userAgent;
 
-      const url = 'https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev?' +
-        new URLSearchParams({
-          ip: ip,
-          navegador: userAgent
-        });
+      // Monta a URL do GAS com os dados
+      const params = new URLSearchParams({
+        ip: ip,
+        navegador: navegador
+      });
 
-      // Envia os dados como se fosse carregar uma imagem
+      const url = 'https://script.google.com/macros/s/AKfycbxLaD2qujCzRde8VRnk-lZ6M5ioKGxFfbmKQnE2nK1t/dev?' + params.toString();
+
+      // Envia os dados disfarçado de imagem
       const img = new Image();
       img.src = url;
-    } catch (err) {
-      console.error('Erro ao registrar acesso:', err);
+
+      // (opcional) Adiciona no DOM se quiser garantir que carrega
+      // document.body.appendChild(img);
+    } catch (e) {
+      console.error("Falha ao registrar acesso:", e);
     }
   }
 
+  // Chama a função quando a página carrega
   window.onload = registrarAcesso;
 </script>
+
 
 </body>
 </html>
