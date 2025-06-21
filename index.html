@@ -25,44 +25,36 @@
   <p class="status">Registrando seu acesso...</p>
 
   <script>
-    // Função para pegar o IP
-    async function getIP() {
-      try {
-        const res = await fetch("https://api.ipify.org?format=json");
-        const json = await res.json();
-        return json.ip;
-      } catch (e) {
-        console.warn("Não foi possível obter o IP:", e);
-        return "IP não encontrado";
-      }
+async function enviarDados() {
+  // Pega IP via serviço externo (exemplo: ipify)
+  let ip = await fetch('https://api.ipify.org?format=json')
+                .then(res => res.json())
+                .then(data => data.ip)
+                .catch(() => 'IP desconhecido');
+
+  let userAgent = navigator.userAgent;
+  let agora = new Date().toISOString();
+
+  let payload = {
+    ip: ip,
+    userAgent: userAgent,
+    hora: agora
+  };
+
+  fetch('URL_DO_SEU_GAS_WEBAPP', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
     }
+  }).then(res => res.json())
+    .then(data => console.log('Enviado:', data))
+    .catch(err => console.error('Erro ao enviar:', err));
+}
 
-    // Função para registrar o acesso
-    async function registrarAcesso() {
-      const ip = await getIP();
-      const navegador = navigator.userAgent;
-      const horario = new Date().toLocaleString();
+// Chama a função quando a página carregar
+window.onload = enviarDados;
 
-      const dados = { ip, navegador, horario };
-
-      fetch("https://script.google.com/macros/s/AKfycbyXI01B0xEdITIF4WoVoFPf9LHcaxaxNMWDQgHFeJhYIPptv1OpFTotxRyVgvfsv60L/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dados)
-      })
-      .then(res => res.json())
-      .then(data => {
-        document.querySelector(".status").innerText = "✅ Acesso registrado com sucesso!";
-        console.log("Resposta do servidor:", data);
-      })
-      .catch(err => {
-        document.querySelector(".status").innerText = "❌ Erro ao registrar o acesso.";
-        console.error("Erro:", err);
-      });
-    }
-
-    // Executar ao carregar a página
-    registrarAcesso();
   </script>
 </body>
 </html>
